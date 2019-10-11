@@ -7,8 +7,8 @@ import (
 	"github.com/trustelem/zxcvbn/match"
 )
 
-func Test_reverseDictionnaryMatch(t *testing.T) {
-	rdm := reverseDictionnaryMatch{
+func Test_reverseDictionaryMatch(t *testing.T) {
+	rdm := reverseDictionaryMatch{
 		dm: dictionaryMatch{
 			rankedDictionaries: map[string]rankedDictionary{
 				"d1": mapRankedDictionary{

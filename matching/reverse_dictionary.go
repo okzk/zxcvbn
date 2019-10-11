@@ -4,11 +4,11 @@ import (
 	"github.com/trustelem/zxcvbn/match"
 )
 
-type reverseDictionnaryMatch struct {
+type reverseDictionaryMatch struct {
 	dm dictionaryMatch
 }
 
-func (rdm reverseDictionnaryMatch) Matches(password string) []*match.Match {
+func (rdm reverseDictionaryMatch) Matches(password string) []*match.Match {
 	reversedPassword := reverse(password)
 	matches := rdm.dm.Matches(reversedPassword)
 	for _, m := range matches {

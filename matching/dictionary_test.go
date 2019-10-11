@@ -184,7 +184,7 @@ func test_dictionaryMatch(t *testing.T, dm dictionaryMatch) {
 }
 
 func Test_defaultdictionary(t *testing.T) {
-	got := defaultRankedDictionnaries.Matches("wow")
+	got := defaultRankedDictionaries.Matches("wow")
 	assert.Equal(t, []*match.Match{
 		{
 			Pattern:        "dictionary",
@@ -196,7 +196,7 @@ func Test_defaultdictionary(t *testing.T) {
 			J:              2,
 		}}, got)
 
-	d := defaultRankedDictionnaries.withDict(
+	d := defaultRankedDictionaries.withDict(
 		"user_inputs",
 		buildRankedDict([]string{"foo", "bar"}),
 	)

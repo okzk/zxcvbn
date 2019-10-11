@@ -8,11 +8,11 @@ import (
 )
 
 func Omnimatch(password string, userInputs []string) (matches []*match.Match) {
-	dictMatcher := defaultRankedDictionnaries.withDict("user_inputs", buildRankedDict(userInputs))
+	dictMatcher := defaultRankedDictionaries.withDict("user_inputs", buildRankedDict(userInputs))
 
 	matchers := []match.Matcher{
 		dictMatcher,
-		reverseDictionnaryMatch{dm: dictMatcher},
+		reverseDictionaryMatch{dm: dictMatcher},
 		l33tMatch{dm: dictMatcher, table: l33tTable},
 		spatialMatch{graphs: defaultGraphs},
 		repeatMatch{},
@@ -29,7 +29,7 @@ func Omnimatch(password string, userInputs []string) (matches []*match.Match) {
 }
 
 var (
-	defaultRankedDictionnaries = loadDefaultDictionnaries()
+	defaultRankedDictionaries = loadDefaultDictionaries()
 	defaultGraphs              = loadDefaultAdjacencyGraphs()
 	defaultRegexpMatch         = []struct {
 		Name   string
@@ -56,7 +56,7 @@ var (
 	}
 )
 
-func loadDefaultDictionnaries() dictionaryMatch {
+func loadDefaultDictionaries() dictionaryMatch {
 	rd := make(map[string]rankedDictionary)
 	for n, list := range frequency.FrequencyLists {
 		rd[n] = buildRankedDict(list)

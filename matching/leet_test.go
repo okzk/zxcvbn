@@ -241,7 +241,7 @@ func TestDeterministicOutput(t *testing.T) {
 	password := "coRrecth0rseba++ery9.23.2007staple$"
 
 	lm := l33tMatch{
-		dm:    defaultRankedDictionnaries,
+		dm:    defaultRankedDictionaries,
 		table: l33tTable,
 	}
 
