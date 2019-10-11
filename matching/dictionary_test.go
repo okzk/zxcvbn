@@ -2,12 +2,13 @@ package matching
 
 import (
 	"github.com/test-go/testify/assert"
+	"github.com/trustelem/zxcvbn/frequency"
 	"testing"
 
 	"github.com/trustelem/zxcvbn/match"
 )
 
-func Test_dictionaryMatch(t *testing.T) {
+func Test_mapRankedDictionaryMatch(t *testing.T) {
 	dm := dictionaryMatch{
 		rankedDictionaries: map[string]rankedDictionary{
 			"d1": mapRankedDictionary{
@@ -26,6 +27,52 @@ func Test_dictionaryMatch(t *testing.T) {
 			},
 		},
 	}
+	test_dictionaryMatch(t, dm)
+
+	// matches against all words in provided dictionaries
+	for name, dict := range dm.rankedDictionaries {
+		for word, rank := range dict.(mapRankedDictionary) {
+			if word == "motherboard" {
+				// skip words that contain others
+				continue
+			}
+			assert.Equal(t, []*match.Match{
+				{
+					Pattern:        "dictionary",
+					Token:          word,
+					MatchedWord:    word,
+					Rank:           rank,
+					DictionaryName: name,
+					I:              0,
+					J:              len(word) - 1,
+				}}, dm.Matches(word))
+		}
+	}
+}
+
+func Test_linearSearchRankedDictionaryMatch(t *testing.T) {
+	dm := dictionaryMatch{
+		rankedDictionaries: map[string]rankedDictionary{
+			"d1": linearSearchRankedDictionary{
+				"motherboard",
+				"mother",
+				"board",
+				"abcd",
+				"cdef",
+			},
+			"d2": linearSearchRankedDictionary{
+				"z",
+				"8",
+				"99",
+				"$",
+				"asdf1234&*",
+			},
+		},
+	}
+	test_dictionaryMatch(t, dm)
+}
+
+func test_dictionaryMatch(t *testing.T, dm dictionaryMatch) {
 	tests := []struct {
 		name     string
 		password string
@@ -134,26 +181,6 @@ func Test_dictionaryMatch(t *testing.T) {
 			}}, dm.Matches(pv.password))
 
 	}
-
-	// matches against all words in provided dictionaries
-	for name, dict := range dm.rankedDictionaries {
-		for word, rank := range dict.(mapRankedDictionary) {
-			if word == "motherboard" {
-				// skip words that contain others
-				continue
-			}
-			assert.Equal(t, []*match.Match{
-				{
-					Pattern:        "dictionary",
-					Token:          word,
-					MatchedWord:    word,
-					Rank:           rank,
-					DictionaryName: name,
-					I:              0,
-					J:              len(word) - 1,
-				}}, dm.Matches(word))
-		}
-	}
 }
 
 func Test_defaultdictionary(t *testing.T) {
@@ -199,4 +226,46 @@ func Test_defaultdictionary(t *testing.T) {
 			J:              5,
 		},
 	}, filtered)
+}
+
+const testPassword = "IE!vHc7abA6tj!HQxP1UVKDI9l5RQUS5@200rzXkQJ$t@%oube#&xFtucuceC1f9%MOD9ygxgnbZZ4J3RciGmd7*biad*R!$^b*k"
+
+func BenchmarkMapRankedDictionaryMatch_8_64(b *testing.B) {
+	// password length:8, dictionary size: 64
+	password := testPassword[:8]
+	dict := newMapRankedDictionary(frequency.FrequencyLists["passwords"][:64])
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dict.matches("test", password)
+	}
+}
+
+func BenchmarkLinearSearchRankedDictionaryMatch_8_64(b *testing.B) {
+	// password length:8, dictionary size: 64
+	password := testPassword[:8]
+	dict := newLinearSearchRankedDictionary(frequency.FrequencyLists["passwords"][:64])
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dict.matches("test", password)
+	}
+}
+
+func BenchmarkMapRankedDictionaryMatch_64_64(b *testing.B) {
+	// password length:64, dictionary size: 64
+	password := testPassword[:64]
+	dict := newMapRankedDictionary(frequency.FrequencyLists["passwords"][:64])
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dict.matches("test", password)
+	}
+}
+
+func BenchmarkLinearSearchRankedDictionaryMatch_64_64(b *testing.B) {
+	// password length:64, dictionary size: 64
+	password := testPassword[:64]
+	dict := newLinearSearchRankedDictionary(frequency.FrequencyLists["passwords"][:64])
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dict.matches("test", password)
+	}
 }

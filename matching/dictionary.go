@@ -69,6 +69,49 @@ func (dict mapRankedDictionary) matches(dictionaryName, password string) []*matc
 	return results
 }
 
+type linearSearchRankedDictionary []string
+
+func newLinearSearchRankedDictionary(unrankedList []string) linearSearchRankedDictionary {
+	result := make(linearSearchRankedDictionary, len(unrankedList))
+
+	for i, v := range unrankedList {
+		result[i] = strings.ToLower(v)
+	}
+	return result
+}
+
+func (dict linearSearchRankedDictionary) matches(dictionaryName, password string) []*match.Match {
+	var results []*match.Match
+	lowerPassword := strings.ToLower(password)
+	for idx, word := range dict {
+		pos := 0
+		for {
+			n := strings.Index(lowerPassword[pos:], word)
+			if n == -1 {
+				break
+			}
+			i := pos + n
+			j := i + len(word) - 1
+			matchDic := &match.Match{
+				Pattern:        "dictionary",
+				I:              i,
+				J:              j,
+				Token:          password[i : j+1],
+				MatchedWord:    word,
+				Rank:           idx + 1,
+				DictionaryName: dictionaryName,
+			}
+			results = append(results, matchDic)
+			pos = i + 1
+		}
+	}
+	return results
+}
+
 func buildRankedDict(unrankedList []string) rankedDictionary {
+	// linearSearchRankedDictionary is faster than mapRankedDictionary when dictionary size is small enough.
+	if len(unrankedList) < 64 {
+		return newLinearSearchRankedDictionary(unrankedList)
+	}
 	return newMapRankedDictionary(unrankedList)
 }
