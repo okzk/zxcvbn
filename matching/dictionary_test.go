@@ -9,15 +9,15 @@ import (
 
 func Test_dictionaryMatch(t *testing.T) {
 	dm := dictionaryMatch{
-		rankedDictionaries: map[string]rankedDictionnary{
-			"d1": rankedDictionnary{
+		rankedDictionaries: map[string]rankedDictionary{
+			"d1": rankedDictionary{
 				"motherboard": 1,
 				"mother":      2,
 				"board":       3,
 				"abcd":        4,
 				"cdef":        5,
 			},
-			"d2": rankedDictionnary{
+			"d2": rankedDictionary{
 				"z":          1,
 				"8":          2,
 				"99":         3,

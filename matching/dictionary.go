@@ -7,7 +7,7 @@ import (
 )
 
 type dictionaryMatch struct {
-	rankedDictionaries map[string]rankedDictionnary
+	rankedDictionaries map[string]rankedDictionary
 }
 
 func (dm dictionaryMatch) Matches(password string) []*match.Match {
@@ -39,8 +39,8 @@ func (dm dictionaryMatch) Matches(password string) []*match.Match {
 	return results
 }
 
-func (dm dictionaryMatch) withDict(name string, d rankedDictionnary) dictionaryMatch {
-	rd2 := make(map[string]rankedDictionnary, len(dm.rankedDictionaries)+1)
+func (dm dictionaryMatch) withDict(name string, d rankedDictionary) dictionaryMatch {
+	rd2 := make(map[string]rankedDictionary, len(dm.rankedDictionaries)+1)
 	for k, v := range dm.rankedDictionaries {
 		rd2[k] = v
 	}
@@ -48,10 +48,10 @@ func (dm dictionaryMatch) withDict(name string, d rankedDictionnary) dictionaryM
 	return dictionaryMatch{rankedDictionaries: rd2}
 }
 
-type rankedDictionnary map[string]int
+type rankedDictionary map[string]int
 
-func buildRankedDict(unrankedList []string) rankedDictionnary {
-	result := make(rankedDictionnary)
+func buildRankedDict(unrankedList []string) rankedDictionary {
+	result := make(rankedDictionary)
 
 	for i, v := range unrankedList {
 		result[strings.ToLower(v)] = i + 1

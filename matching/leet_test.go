@@ -93,14 +93,14 @@ func Test_enumerateLeetSubs(t *testing.T) {
 func Test_l33tMatch(t *testing.T) {
 	lm := l33tMatch{
 		dm: dictionaryMatch{
-			rankedDictionaries: map[string]rankedDictionnary{
-				"words": rankedDictionnary{
+			rankedDictionaries: map[string]rankedDictionary{
+				"words": rankedDictionary{
 					"aac":       1,
 					"password":  3,
 					"paassword": 4,
 					"asdf0":     5,
 				},
-				"words2": rankedDictionnary{
+				"words2": rankedDictionary{
 					"cgo": 1,
 				},
 			},

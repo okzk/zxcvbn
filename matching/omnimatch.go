@@ -57,7 +57,7 @@ var (
 )
 
 func loadDefaultDictionnaries() dictionaryMatch {
-	rd := make(map[string]rankedDictionnary)
+	rd := make(map[string]rankedDictionary)
 	for n, list := range frequency.FrequencyLists {
 		rd[n] = buildRankedDict(list)
 	}
