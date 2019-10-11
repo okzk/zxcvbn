@@ -10,14 +10,14 @@ import (
 func Test_dictionaryMatch(t *testing.T) {
 	dm := dictionaryMatch{
 		rankedDictionaries: map[string]rankedDictionary{
-			"d1": rankedDictionary{
+			"d1": mapRankedDictionary{
 				"motherboard": 1,
 				"mother":      2,
 				"board":       3,
 				"abcd":        4,
 				"cdef":        5,
 			},
-			"d2": rankedDictionary{
+			"d2": mapRankedDictionary{
 				"z":          1,
 				"8":          2,
 				"99":         3,
@@ -137,7 +137,7 @@ func Test_dictionaryMatch(t *testing.T) {
 
 	// matches against all words in provided dictionaries
 	for name, dict := range dm.rankedDictionaries {
-		for word, rank := range dict {
+		for word, rank := range dict.(mapRankedDictionary) {
 			if word == "motherboard" {
 				// skip words that contain others
 				continue

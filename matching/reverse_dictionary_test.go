@@ -11,7 +11,7 @@ func Test_reverseDictionnaryMatch(t *testing.T) {
 	rdm := reverseDictionnaryMatch{
 		dm: dictionaryMatch{
 			rankedDictionaries: map[string]rankedDictionary{
-				"d1": rankedDictionary{
+				"d1": mapRankedDictionary{
 					"123": 1,
 					"321": 2,
 					"456": 3,

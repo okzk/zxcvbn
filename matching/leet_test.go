@@ -94,13 +94,13 @@ func Test_l33tMatch(t *testing.T) {
 	lm := l33tMatch{
 		dm: dictionaryMatch{
 			rankedDictionaries: map[string]rankedDictionary{
-				"words": rankedDictionary{
+				"words": mapRankedDictionary{
 					"aac":       1,
 					"password":  3,
 					"paassword": 4,
 					"asdf0":     5,
 				},
-				"words2": rankedDictionary{
+				"words2": mapRankedDictionary{
 					"cgo": 1,
 				},
 			},
