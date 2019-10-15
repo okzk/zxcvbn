@@ -2,7 +2,6 @@ package matching
 
 import (
 	"github.com/trustelem/zxcvbn/adjacency"
-	"github.com/trustelem/zxcvbn/frequency"
 	"github.com/trustelem/zxcvbn/match"
 	"regexp"
 )
@@ -30,8 +29,8 @@ func Omnimatch(password string, userInputs []string) (matches []*match.Match) {
 
 var (
 	defaultRankedDictionaries = loadDefaultDictionaries()
-	defaultGraphs              = loadDefaultAdjacencyGraphs()
-	defaultRegexpMatch         = []struct {
+	defaultGraphs             = loadDefaultAdjacencyGraphs()
+	defaultRegexpMatch        = []struct {
 		Name   string
 		Regexp *regexp.Regexp
 	}{
@@ -55,16 +54,6 @@ var (
 		"z": {"2"},
 	}
 )
-
-func loadDefaultDictionaries() dictionaryMatch {
-	rd := make(map[string]rankedDictionary)
-	for n, list := range frequency.FrequencyLists {
-		rd[n] = buildRankedDict(list)
-	}
-	return dictionaryMatch{
-		rankedDictionaries: rd,
-	}
-}
 
 func loadDefaultAdjacencyGraphs() []*adjacency.Graph {
 	return []*adjacency.Graph{

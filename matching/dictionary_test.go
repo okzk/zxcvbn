@@ -3,6 +3,7 @@ package matching
 import (
 	"github.com/test-go/testify/assert"
 	"github.com/trustelem/zxcvbn/frequency"
+	"strings"
 	"testing"
 
 	"github.com/trustelem/zxcvbn/match"
@@ -228,11 +229,11 @@ func Test_defaultdictionary(t *testing.T) {
 	}, filtered)
 }
 
-const testPassword = "IE!vHc7abA6tj!HQxP1UVKDI9l5RQUS5@200rzXkQJ$t@%oube#&xFtucuceC1f9%MOD9ygxgnbZZ4J3RciGmd7*biad*R!$^b*k"
+const testPassword64 = "jtI3@GTCMEGXKow7S6l8G2q$kcIBRWOBz*E#H#Mqm1dA%$@mxjYQ%#sMj0F2wDNf"
 
 func BenchmarkMapRankedDictionaryMatch_8_64(b *testing.B) {
 	// password length:8, dictionary size: 64
-	password := testPassword[:8]
+	password := testPassword64[:8]
 	dict := newMapRankedDictionary(frequency.FrequencyLists["passwords"][:64])
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -242,7 +243,7 @@ func BenchmarkMapRankedDictionaryMatch_8_64(b *testing.B) {
 
 func BenchmarkLinearSearchRankedDictionaryMatch_8_64(b *testing.B) {
 	// password length:8, dictionary size: 64
-	password := testPassword[:8]
+	password := testPassword64[:8]
 	dict := newLinearSearchRankedDictionary(frequency.FrequencyLists["passwords"][:64])
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -252,20 +253,26 @@ func BenchmarkLinearSearchRankedDictionaryMatch_8_64(b *testing.B) {
 
 func BenchmarkMapRankedDictionaryMatch_64_64(b *testing.B) {
 	// password length:64, dictionary size: 64
-	password := testPassword[:64]
 	dict := newMapRankedDictionary(frequency.FrequencyLists["passwords"][:64])
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		dict.matches("test", password)
+		dict.matches("test", testPassword64)
 	}
 }
 
 func BenchmarkLinearSearchRankedDictionaryMatch_64_64(b *testing.B) {
 	// password length:64, dictionary size: 64
-	password := testPassword[:64]
 	dict := newLinearSearchRankedDictionary(frequency.FrequencyLists["passwords"][:64])
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		dict.matches("test", password)
+		dict.matches("test", testPassword64)
+	}
+}
+
+func BenchmarkDefaultDictionary(b *testing.B) {
+	// password length:256
+	password := strings.Repeat(testPassword64, 4)
+	for i := 0; i < b.N; i++ {
+		defaultRankedDictionaries.Matches(password)
 	}
 }
